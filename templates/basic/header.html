@@ -1,0 +1,36 @@
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<div class="navbar-brand" align='center'>
+				牙科診所掛號預約系統
+			</div>			
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="/">HOME</a></li>
+			{%if is_patient%}
+				<li><a href="/register">掛號</a></li>
+				<li><a href="/search">查詢預約</a></li>
+				<li><a href="/dentists">醫師介紹</a></li>
+				<li><a href="/services">治療項目</a></li>
+				<li><a href="/contact">聯絡我們</a></li>
+				<li><a href="/info">個人資料</a></li>
+				<li><a href="/logout">登出</a></li>
+			{%elif is_manager%}
+				<li><a href="/register_manage">預約管理</a></li>
+				<li><a href="/patient_manage">病患資料管理</a></li>
+				<li><a href="/dentist_manage">醫師排班</a></li>
+				<li><a href="/service_manage">診療項目管理</a></li>
+				<li><a href="/contact_manage">回饋管理</a></li>
+				<li><a href="/logout">登出</a></li>
+			{%else%}
+				<li><a href="/dentists">醫師介紹</a></li>
+				<li><a href="/services">治療項目</a></li>
+				<li><a href="/contact">聯絡我們</a></li>
+				<li><a href="/login">登入</a></li>
+				<li><a href="/logon">註冊</a></li>
+			{%endif%}
+		</ul>
+	</div>
+</nav>
+
+

@@ -1,0 +1,155 @@
+{% extends 'basic/base.html' %}
+{% block title %}醫師排班與治療項目{% endblock %}
+{% block css %}
+<style>
+    .manage-container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        padding: 30px 40px;
+        font-family: 'Inter', sans-serif;
+        color: #222;
+    }
+    h2 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #007bff;
+        margin-bottom: 30px;
+        border-bottom: 3px solid #007bff;
+        padding-bottom: 6px;
+        text-align: center;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 36px;
+    }
+    thead th {
+        background-color: #e7f3ff;
+        color: #0056b3;
+        font-weight: 600;
+        text-align: left;
+        padding: 12px 15px;
+        border-bottom: 2px solid #007bff;
+    }
+    tbody tr:nth-child(even) {
+        background-color: #f9faff;
+    }
+    .btn-edit {
+        background-color: #ffc107;
+        color: #222;
+    }
+    .btn-edit:hover {
+        background-color: #e0a800;
+    }
+    .btn-delete {
+        background-color: #dc3545;
+        color: #fff;
+    }
+    .btn-delete:hover {
+        background-color: #b02a37;
+    }
+    form.add-dentist-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        border-top: 2px solid #007bff;
+        padding-top: 20px;
+        justify-content: space-between;
+    }
+    form .form-group {
+        flex: 1 1 45%;
+        display: flex;
+        flex-direction: column;
+    }
+    form label {
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #333;
+    }
+    form input[type="text"],
+    form textarea,
+    form input[type="number"] {
+        padding: 8px 12px;
+        font-size: 1.5rem;
+        border-radius: 6px;
+        border: 1.5px solid #ccc;
+        resize: vertical;
+        transition: border-color 0.3s ease;
+    }
+    form button.submit-btn {
+        flex: 1 1 100%;
+        max-width: 160px;
+        background-color: #007bff;
+        color: white;
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 12px 0;
+        border: none;
+        cursor: pointer;
+    }
+    form button.submit-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="manage-container" role="main" aria-label="醫師排班與治療項目">
+    <h2>醫師排班與治療項目</h2>
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {% endfor %}
+    <table>
+        <thead>
+            <tr>
+                <th>醫師名稱</th>
+                <th>專長治療項目</th>
+                <th>排班時間</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dentist in dentists %}
+            <tr>
+                <td>{{dentist.name}}</td>
+                <td>{%if dentist.services%}
+                        {%for service in dentist.services.all%}
+                            {{service.name}},
+                        {%endfor%}
+                    {%endif%}
+                </td>
+                <td>
+                    {% if dentist.time %}
+                        {% for time in dentist.time.all %}
+                            {{time}},
+                        {% endfor %}
+                    {% else %}
+                        無
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'dentist_edit' dentist.id %}" class="btn btn-edit" aria-label="編輯 {{dentist.name}}">編輯</a>
+                    <form action="{% url 'dentist_delete' dentist.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-delete" aria-label="刪除 {{dentist.name}}" onclick="return confirm('確定要刪除此時段安排嗎？');">刪除</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align:center; color: #666;">尚無時段安排</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form class="add-dentist-form" action="." method="POST" aria-label="新增醫師看診時段表單">
+        {% csrf_token %}
+        <table>
+            {{dentist_form.as_table}}
+        </table>
+        <button type="submit" class="submit-btn">新增項目</button>
+    </form>
+</div>
+{% endblock %}

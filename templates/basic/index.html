@@ -1,0 +1,49 @@
+{%extends 'basic/base.html'%}
+{%block title%}首頁{%endblock%}
+{%load static%}
+{%block css%}
+	<style>
+        .hero {
+            background-image: url("{% static 'images/index.png' %}");
+            background-size: cover;
+            background-position: center;
+            padding: 100px 20px;
+            text-align: center;
+            color: white;
+        }
+        .hero h1,
+        .hero p {
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+        }
+        .hero .btn {
+            margin-top: 20px;
+        }
+    </style>
+{%endblock%}
+{%block content%}
+	<div class="container">
+		{%for message in messages%}
+			<div class="alert alert-{{message.tags}}">{{message}}</div>
+		{%endfor%}
+	    <div class="hero">
+	        <h1>歡迎來到牙科診所掛號預約系統</h1>
+	        <p>我們提供專業的牙科服務，讓您的牙齒健康無憂。</p>
+	       	{%if is_patient%}
+	       		<a href="/register" class="btn btn-primary">立即掛號</a>
+	       	{%elif is_manager%}
+	       		<a href="/register_manage" class="btn btn-primary">預約管理</a>
+	       	{%else%}
+	       		<a href="/login" class="btn btn-primary">立即登入</a>
+	       	{%endif%}
+	    </div>
+	    <div class="services">
+	        <h2>我們的服務項目</h2>
+	        <ul class="list-group">
+	        	{%for service in services%}
+	        		<li class="list-group-item" style="background-color:{%cycle '#e0f7fa' '#e8f5e9' '#fff3e0' '#fce4ec'%};">{{service}}</li>
+	        	{%endfor%}
+	        </ul>
+	    </div>
+	</div>
+{%endblock%}
+

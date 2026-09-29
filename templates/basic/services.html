@@ -1,0 +1,62 @@
+{% extends 'basic/base.html' %}
+{% block title %}治療項目{% endblock %}
+{% block css %}
+<style>
+    .services-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        padding: 40px 48px;
+        font-family: 'Inter', sans-serif;
+        color: #222222;
+    }
+    .services-container h2 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        border-bottom: 3px solid #007bff;
+        padding-bottom: 12px;
+        color: #007bff;
+        text-align: center;
+    }
+    .service-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 32px;
+    }
+    .service-card {
+        background: #f9faff;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .service-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #0d3b66;
+        margin-bottom: 12px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+    <div class="services-container" role="main" aria-label="治療項目列表">
+        <h2>治療項目</h2>
+        <div class="service-list">
+            {% for service in services %}
+                <div class="service-card" tabindex="0" aria-labelledby="service-title-{{forloop.counter}}">
+                    <h3 id="service-title-{{forloop.counter}}" class="service-title">{{service.name}}</h3>
+                    <p class="service-description">{{service.description|linebreaks}}</p>
+                </div>
+            {% empty %}
+                <p>目前無治療項目資料。</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+

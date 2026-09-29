@@ -1,0 +1,124 @@
+{%extends 'basic/base.html'%}
+{%block title%}掛號查詢紀錄{%endblock%}
+{%block css%}
+<style>
+  .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        padding: 30px 40px;
+        font-family: 'Inter', sans-serif;
+        color: #222;
+    }
+    h2 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #007bff;
+        margin-bottom: 32px;
+        border-bottom: 3px solid #007bff;
+        padding-bottom: 8px;
+        text-align: center;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    thead th {
+        background-color: #e7f3ff;
+        color: #0056b3;
+        font-weight: 600;
+        padding: 12px 15px;
+        border-bottom: 2px solid #007bff;
+        text-align: left;
+    }
+    tbody td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eaeaea;
+    }
+    tbody tr:nth-child(even) {
+        background-color: #f9faff;
+    }
+    .status {
+        font-weight: 600;
+    }
+    .status.done {
+        color: #28a745;
+    }
+    .status.pending {
+        color: #ffc107;
+    }
+    .search-bar {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .search-bar input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1.5px solid #ccc;
+        border-radius: 8px;
+        margin-right: 10px;
+        font-size: 1.5rem;
+        transition: border-color 0.3s ease;
+    }
+    .search-bar input[type="text"]:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+    .search-bar button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+</style>
+{%endblock%}
+{%block content%}
+    <div class="container" role="main" aria-label="掛號查詢紀錄">
+        <h2>掛號查詢紀錄</h2>
+        {%for message in messages%}
+            <div class="alert alert-{{message.tags}}">{{message}}</div>
+        {%endfor%}
+        <form method="GET" class="search-bar" role="search" aria-label="搜尋掛號資料">
+            <input type="text" name="query" placeholder="輸入姓名、醫師名稱、治療項目或預約時間" 
+                   aria-label="搜尋" value="{{request.GET.query|default:''}}">
+            <button type="submit">搜尋</button>
+        </form>
+        {%if registers%}
+            <table>
+                <thead>
+                    <tr>
+                        <th>醫師名稱</th>
+                        <th>治療項目</th>
+                        <th>預約日期</th>
+                        <th>狀態</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {%for register in registers%}
+                    <tr>
+                        <td>{{register.dentist.name}}</td>
+                        <td>{{register.service.name}}</td>
+                        <td>{{register.appointment_date|date:"Y-m-d"}}</td>
+                        <td>
+                            {%if register.appointment_date <= today%}
+                                <span class="status done">已看診</span>
+                            {%else%}
+                                <span class="status pending">待看診</span>
+                            {%endif%}
+                        </td>
+                    </tr>
+                {%endfor%}
+                </tbody>
+            </table>
+        {%else%}
+            <p>目前沒有掛號紀錄。</p>
+        {%endif%}
+    </div>
+{%endblock%}

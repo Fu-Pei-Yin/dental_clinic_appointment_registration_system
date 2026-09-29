@@ -1,0 +1,94 @@
+{% extends 'basic/base.html' %}
+{% block title %}查看個人資料{% endblock %}
+{% block css %}
+    <style>
+        .edit-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            padding: 30px 40px;
+            font-family: 'Inter', sans-serif;
+            color: #222;
+        }
+        h2 {
+            text-align: center;
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: #007bff;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 12px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        form input[type="text"],
+        form input[type="password"],
+        form select {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 14px;
+            font-size: 1.5rem;
+            border: 1.5px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        form select {
+            appearance: none;
+            background-color: #ffffff;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,5" fill="%23007bff"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center; 
+            background-size: 10px; 
+        }
+        form select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+        .disabled-field {
+            background-color: #f5f5f5;
+            color: #666;
+            cursor: not-allowed;
+        }
+        .submit-btn {
+            background-color: #007bff; 
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 14px 0;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 200px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="edit-container" role="main" aria-label="查看個人資料">
+        <h2>編輯個人資料</h2>
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        <form method="POST" action=".">
+            {% csrf_token %}
+            <table>
+                {{info_form.as_table}}
+            </table>
+            <button type="submit" class="submit-btn">儲存變更</button>
+        </form>
+    </div>
+{% endblock %}

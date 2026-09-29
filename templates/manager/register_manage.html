@@ -1,0 +1,209 @@
+{%extends 'basic/base.html'%}
+{%block title%}預約管理{%endblock%}
+{%block css%}
+  <style>
+    .manage-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      padding: 30px 40px;
+      font-family: 'Inter', sans-serif;
+      color: #222;
+    }
+    h2 {
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: #007bff;
+      margin-bottom: 32px;
+      border-bottom: 3px solid #007bff;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+    thead th {
+      background-color: #f0f8ff;
+      color: #0056b3;
+      font-weight: 600;
+      padding: 12px 15px;
+      border-bottom: 2px solid #007bff;
+      text-align: left;
+    }
+    tbody td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eaeaea;
+      vertical-align: middle;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f9faff;
+    }
+    .btn {
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+      margin-right: 6px;
+    }
+    .btn-edit {
+      background-color: #ffc107;
+      color: #222;
+    }
+    .btn-edit:hover {
+      background-color: #e0a800;
+    }
+    .btn-delete {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .btn-delete:hover {
+      background-color: #b02a37;
+    }
+    form.manage-form {
+      margin-top: 30px;
+      background: #f9faff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    }
+    form.manage-form label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+      color: #333;
+    }
+    form.manage-form input[type="text"],
+    form.manage-form input[type="datetime-local"],
+    form.manage-form select {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 1.5rem;
+      border-radius: 6px;
+      border: 1.5px solid #ccc;
+      margin-bottom: 20px;
+      transition: border-color 0.3s ease;
+    }
+    form.manage-form input[type="text"]:focus,
+    form.manage-form input[type="datetime-local"]:focus,
+    form.manage-form select:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+    form.manage-form button.submit-btn {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 24px;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    form.manage-form button.submit-btn:hover {
+      background-color: #0056b3;
+    }
+    .search-bar {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    .search-bar input[type="text"] {
+      width: 300px;
+      padding: 10px 14px;
+      font-size: 1.5rem;
+      border-radius: 8px;
+      border: 1.5px solid #ccc;
+      transition: border-color 0.3s ease;
+    }
+    .search-bar input[type="text"]:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 6px #90caf9;
+    }
+    .search-bar button {
+      background-color: #007bff;
+      color: white;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 22px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .search-bar button:hover {
+      background-color: #0056b3;
+    }
+    .status {
+        font-weight: 600;
+    }
+    .status.done {
+        color: #28a745;
+    }
+    .status.pending {
+        color: #ffc107;
+    }
+  </style>
+{%endblock%}
+{%block content%}
+  <div class="manage-container" role="main" aria-label="預約管理介面">
+    <h2>預約管理</h2>
+    {%for message in messages%}
+        <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {%endfor%}
+    <form method="GET" class="search-bar" role="search" aria-label="搜尋預約資料">
+      <input type="text" name="query" placeholder="輸入姓名、醫師名稱、治療項目或預約時間" 
+             aria-label="搜尋" value="{{ request.GET.query|default:'' }}">
+      <button type="submit">搜尋</button>
+    </form>
+    <table>
+      <thead>
+        <tr>
+          <th>預約編號</th><th>病患姓名</th><th>醫師</th><th>治療項目</th><th>預約時間</th><th>狀態</th><th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for register in registers%}
+        <tr>
+          <td>{{ register.id }}</td>
+          <td>{{ register.patient_name }}</td>
+          <td>{{ register.dentist.name }}</td>
+          <td>{{ register.service.name }}</td>
+          <td>{{ register.appointment_date|date:"Y-m-d" }}</td>
+          <td>
+              {%if register.appointment_date <= today%}
+                  <span class="status done">已看診</span>
+              {%else%}
+                  <span class="status pending">待看診</span>
+              {%endif%}
+          </td>
+          <td>
+            <a href="{%url 'register_edit' register.id%}" class="btn btn-edit" aria-label="編輯預約{{ register.id }}">編輯</a>
+            <form action="{%url 'register_delete' register.id%}" method="POST" style="display:inline;">
+              {%csrf_token%}
+              <button type="submit" class="btn btn-delete" aria-label="刪除預約{{ register.id }}" onclick="return confirm('確定要刪除該預約嗎？');">刪除</button>
+            </form>
+          </td>
+        </tr>
+        {%empty%}
+        <tr>
+          <td colspan="7" style="color:#666;" align="center">目前無預約紀錄</td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+    <form method="POST" action="." class="manage-form" aria-label="新增或編輯預約表單">
+      {%csrf_token%}
+      <table>
+        {{register_form.as_table}}
+      </table>
+      <button type="submit" class="submit-btn">新增/更新預約</button>
+    </form>
+  </div>
+{%endblock%}

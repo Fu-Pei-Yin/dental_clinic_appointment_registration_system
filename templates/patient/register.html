@@ -1,0 +1,71 @@
+{%extends 'basic/base.html'%}
+{%block title%}病人掛號{%endblock%}
+{%block css%}
+    <style>
+        .register-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            padding: 40px 48px;
+            font-family: 'Inter', sans-serif;
+            color: #222222;
+        }
+        .register-container h2 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 12px;
+            color: #007bff;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        form.register-form input,
+        form.register-form select,
+        form.register-form textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 700;
+            border: 1.5px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+        form.register-form button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        form.register-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{%endblock%}
+{%block content%}
+    <div class="register-container" role="main" aria-label="病人掛號表單">
+        <h2>病人掛號</h2>
+        {%for message in messages%}
+            <div class="alert alert-{{message.tags}}">{{message}}</div>
+        {%endfor%}
+        <form class="register-form" method="POST" action=".">
+            {%csrf_token%}
+                <table>
+                        {{register_form.as_table}}
+                </table>
+            <button type="submit">送出掛號</button>
+        </form>
+    </div>
+{%endblock%}

@@ -1,0 +1,77 @@
+{%extends 'basic/base.html'%}
+{%block title%}回饋訊息管理{%endblock%}
+{%block css%}
+<style>
+  .manage-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 40px 50px;
+    font-family: 'Inter', sans-serif;
+    color: #222;
+  }
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 12px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+  }
+  thead th {
+    background-color: #f0f8ff;
+    color: #0056b3;
+    font-weight: 600;
+    padding: 12px 15px;
+    border-bottom: 2px solid #007bff;
+    text-align: left;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #f9faff;
+  }
+  tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eaeaea;
+    vertical-align: top;
+  }
+</style>
+{%endblock%}
+
+{%block content%}
+<div class="manage-container" role="main" aria-label="回饋訊息管理">
+  <h2>回饋訊息管理</h2>
+  {%for message in messages%}
+    <div class="alert alert-{{message.tags}}">{{message}}</div>
+  {%endfor%}
+  {%if contacts%}
+    <table>
+      <thead>
+        <tr>
+          <th>姓名</th>
+          <th>電子郵件</th>
+          <th>訊息內容</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for contact in contacts%}
+          <tr>
+            <td>{{contact.name}}</td>
+            <td>{{contact.email}}</td>
+            <td>{{contact.message|linebreaksbr}}</td>
+          </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  {%else%}
+    <p style="text-align:center; color: #666;">目前沒有回饋訊息。</p>
+  {%endif%}
+</div>
+{%endblock%}

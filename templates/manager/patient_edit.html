@@ -1,0 +1,78 @@
+{%extends 'basic/base.html'%}
+{%block title%}編輯病患資料{%endblock%}
+{%block css%}
+  <style>
+    .edit-container {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    padding: 30px 40px;
+    font-family: 'Inter', sans-serif;
+    color: #222;
+    }
+    h2 {
+    text-align: center;
+    font-weight: 700;
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 10px;
+    }
+    form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    }
+    form input[type="text"],
+    form input[type="date"],
+    form select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 1.5rem;
+    border-radius: 6px;
+    border: 1.5px solid #ccc;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    }
+    form input[type="text"]:focus,
+    form input[type="date"]:focus,
+    form select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 6px #90caf9;
+    }
+    .btn-submit {
+    background-color: #007bff;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 12px 0;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+    .btn-submit:hover {
+    background-color: #0056b3;
+    }
+  </style>
+{%endblock%}
+{%block content%}
+  <div class="edit-container" role="main" aria-label="編輯病患資料">
+    <h2>編輯病患資料</h2>
+    {%for message in messages%}
+      <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {%endfor%}
+    <form method="POST" action=".">
+      {%csrf_token%}
+      <table>
+        {{patient_form.as_table}}
+      </table>
+      <button type="submit" class="btn-submit">儲存變更</button>
+    </form>
+  </div>
+{%endblock%}

@@ -1,0 +1,114 @@
+{%extends 'basic/base.html'%}
+{%block title%}醫師介紹{%endblock%}
+{%block css%}
+    <style>
+        .dentist-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            padding: 30px 40px;
+            font-family: 'Inter', sans-serif;
+            color: #222;
+        }
+        .dentist-card {
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            transition: box-shadow 0.3s ease;
+        }
+        .service-table th,
+        .service-table td {
+            border: 1px solid #ddd;
+            padding: 10px 14px;
+            text-align: center;
+        }
+        .service-table th {
+            background-color: #f0f8ff;
+            color: #0056b3;
+            font-weight: 600;
+        }
+        .search-bar {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        }
+        .search-bar input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1.5px solid #ccc;
+            border-radius: 8px;
+            margin-right: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .search-bar button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{%endblock%}
+{%block content%}
+    <div class="dentist-container" role="main" aria-label="醫師介紹">
+        <h2 style="color: #007bff"; align='center'>醫師介紹</h2>
+        <form method="GET" class="search-bar" role="search" aria-label="搜尋醫師資料">
+            <input type="text" name="query" placeholder="輸入醫師名稱、看診時間或治療項目" 
+                   aria-label="搜尋" value="{{ request.GET.query|default:'' }}">
+            <button type="submit">搜尋</button>
+        </form>
+        {%for dentist in dentists%}
+            <div class="dentist-card">
+                <div style="color: #0056b3";><h4>{{dentist.name}}</h4></div>
+                <div>
+                    <strong>專長治療項目:</strong>
+                    {%if dentist.services.exists%}
+                        <table class="service-table" aria-label="醫師 {{dentist.name}} 的治療項目表">
+                            <thead>
+                                <tr>
+                                    <th>項目名稱</th>
+                                    <th>價格 (NT$)</th>
+                                    <th>描述</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%for service in dentist.services.all%}
+                                <tr>
+                                    <td>{{service.name}}</td>
+                                    <td>{{service.price}}</td>
+                                    <td>{{service.description|linebreaks}}</td>
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    {%else%}
+                        <p class="no-data">無專長治療項目資料</p>
+                    {%endif%}
+                </div>
+                <div>
+                    <strong>看診時間:</strong>
+                    {%if dentist.time.exists%}
+                        <ul>
+                            {%for sched in dentist.time.all%}
+                                <li>{{sched.time}}</li>
+                            {%endfor%}
+                        </ul>
+                    {%else%}
+                        <p style="color:#666" align="center">無排班時間</p>
+                    {%endif%}
+                </div>
+            </div>
+        {%empty%}
+            <p style="text-align:center; color: #666;">目前尚無醫師資料</p>
+        {%endfor%}
+    </div>
+{%endblock%}

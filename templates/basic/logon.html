@@ -1,0 +1,89 @@
+{%extends 'basic/base.html'%}
+{%block title%}註冊{%endblock%}
+{% block css %}
+    <style>
+        .container {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 700px;
+        margin: 60px auto;
+        }
+        h2 {
+        text-align: center;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #007bff;
+        margin-bottom: 30px;
+        border-bottom: 3px solid #007bff;
+        padding-bottom: 12px;
+        }
+        form input[type="text"],
+        form input[type="password"],
+        form select,
+        form input[type="date"] {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 1.5rem;
+            border: 1.5px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        form input[type="date"] {
+            appearance: none;
+            background-image:
+                url("data:image/svg+xml;utf8,<svg fill='%23007bff' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 24px 24px;
+            cursor: pointer;
+        }
+        form select {
+            appearance: none;
+            background-color: #ffffff;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,5" fill="%23007bff"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center; 
+            background-size: 10px; 
+        }
+        form select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+        input[type="submit"] {
+            background-color: #007bff; 
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 14px 0;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+    </style>
+{% endblock %}
+{%block content%}
+	<div class="container" align="center">
+        <h2>註冊</h2>
+        {%for message in messages%}
+            <div class="alert alert-{{message.tags}}">{{message}}</div>
+        {%endfor%}
+        <form action="." method="POST">
+            {%csrf_token%}
+            <table>
+                {{logon_form.as_table}}
+            </table>
+            <input type="submit" value="註冊">
+        </form>
+    </div>
+{%endblock%}

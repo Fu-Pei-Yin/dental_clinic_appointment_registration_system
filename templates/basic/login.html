@@ -1,0 +1,84 @@
+{%extends 'basic/base.html'%}
+{%block title%}{%endblock%}
+{% block css %}
+    <style>
+        .container {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 500px;
+        margin: 60px auto;
+        }
+        h2 {
+        text-align: center;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #007bff;
+        margin-bottom: 30px;
+        border-bottom: 3px solid #007bff;
+        padding-bottom: 12px;
+        }
+        form input[type="text"],
+        form input[type="password"] {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 1.5rem;
+        border: 1.5px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .forgot-password {
+        text-align: center;
+        margin-top: 16px;
+        }
+        .forgot-password a {
+        color: #007bff;
+        font-weight: 600;
+        text-decoration: none;
+        transition: text-decoration 0.3s ease;
+        }
+        .forgot-password a:hover,
+        .forgot-password a:focus {
+        text-decoration: underline;
+        outline: none;
+        }
+        input[type="submit"] {
+            background-color: #007bff; 
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 14px 0;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+    </style>
+{% endblock %}
+{%block content%}
+	<div class="container" align="center">
+        <h2>登入</h2>
+        {%for message in messages%}
+            <div class="alert alert-{{message.tags}}">{{message}}</div>
+        {%endfor%}
+        <form action="." method="POST">
+            {%csrf_token%}
+            <table>
+                {{login_form.as_table}}
+            </table>
+            <input type="submit" value="登入">
+         </form>
+        <div class="forgot-password">
+            <a href="/password_recovery" id="forgotPasswordBtn">忘記密碼？</a>
+        </div>
+    </div>
+</div>
+{%endblock%}
